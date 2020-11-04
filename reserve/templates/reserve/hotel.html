@@ -1,0 +1,17 @@
+{% extends "reserve/layout.html" %}
+
+{% load humanize %}
+
+{% block body %}
+<h1>{{ hotel.name }}</h1>
+<h5>{{ hotel.address }}</h5>
+<div class="list-group">
+    {% for room in rooms %}
+    <div class="list-group-item list-group-item-action flex-column align-items-start">
+        <h4>{{ room.name }} | ${{ room.price|floatformat:2}}</h4>
+        <p>{{ room.description }}</p>
+        <input type="button" onclick="window.location.href='/reserve/{{ room.id }}'" class="btn btn-primary" value="Reserve">
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

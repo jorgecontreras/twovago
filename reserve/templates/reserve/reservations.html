@@ -1,0 +1,17 @@
+{% extends "reserve/layout.html" %}
+
+{% block body %}
+<div class="list-group">
+    {% for reservation in reservations %}
+    <div class="list-group-item list-group-item-action flex-column align-items-start">
+        <a href="{% url 'view_reservation' reservation.id %}">
+            <h4>{{ reservation.room }} </h4> </a>
+    
+            <p>{{ reservation.checkin }} to {{ reservation.checkout }}</p>
+        {% if reservation.status == 'canceled' %}
+        <span class="badge badge-danger">Canceled</span>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
