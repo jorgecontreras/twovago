@@ -30,3 +30,7 @@ The user can mark his favorite hotels. When on the hotel page, the user should b
 ## 7. Favorites page.
 
 The hotels that have been marked as favorite will be displayed in the Favorites section, accesible from the top menu. This will display only for logged in users. If there are no hotels marked as favorite, the page should indicate that.
+
+## 8. Admin.
+
+All the hotels, rooms and cities are managed with the built-in Django admin. 
