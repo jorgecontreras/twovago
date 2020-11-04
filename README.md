@@ -1,4 +1,4 @@
-# twovago
+# reservations
 Hotel reservation system
 
 # Specifications
