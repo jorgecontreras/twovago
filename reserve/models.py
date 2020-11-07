@@ -34,11 +34,6 @@ class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="user")
     hotel = models.ForeignKey(Hotel, on_delete=models.PROTECT, related_name="favorite_hotel")
 
-class Review(models.Model):
-    review = models.CharField(max_length=4000)
-    author = models.ForeignKey(User, on_delete=models.PROTECT, related_name="author")
-    stars = models.IntegerField(choices=[(i,i) for i in range(1, 6)])
-
 class Reservation(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="user_reservation")
     room = models.ForeignKey(Room, on_delete=models.PROTECT, related_name="room_reserved")
