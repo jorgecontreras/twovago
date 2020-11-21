@@ -1,9 +1,21 @@
 {% extends "reserve/layout.html" %}
 
+{% load static %}
+
 {% load humanize %}
 
 {% block body %}
-<h1>{{ hotel.name }}</h1>
+<h1>{{ hotel.name }} 
+    
+    <a href="#a" onclick="favorite({{hotel.id}});" id="fav_hotel{{hotel.id}}"> 
+        {% if favorite %}
+        <img src='/static/reserve/like.png' height='45px' %}> 
+        {% else %}
+        <img src='/static/reserve/unlike.png' height='45px' %}> 
+        {% endif %}
+    </a>
+</h1>
+
 <h5>{{ hotel.address }}</h5>
 <div class="list-group">
     {% for room in rooms %}
@@ -14,4 +26,8 @@
     </div>
     {% endfor %}
 </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'reserve/reserve.js' %}"></script>
 {% endblock %}

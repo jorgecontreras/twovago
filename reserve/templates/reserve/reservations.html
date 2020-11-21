@@ -1,6 +1,13 @@
 {% extends "reserve/layout.html" %}
 
 {% block body %}
+
+{% if not reservations %}
+<div class="alert alert-info" role="alert">
+    Your reservations will be displayed here. <a href="{% url 'index' %}">Start traveling!</a>   
+  </div>
+{% endif %}
+
 <div class="list-group">
     {% for reservation in reservations %}
     <div class="list-group-item list-group-item-action flex-column align-items-start">

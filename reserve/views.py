@@ -8,16 +8,32 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django import forms
 import dateutil.parser
 
-from .models import User, Hotel, Room, Reservation
+from .models import User, Hotel, Room, Reservation, Favorite, City
 
+class SearchForm(forms.Form):
+    destination = forms.CharField(label='')
 
 def index(request):
 
     user = request.user 
 
-    hotels = Hotel.objects.all()
+    if request.method == "POST":
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            destination = form.cleaned_data["destination"]
+            destination = destination.strip().lower()
+
+        if destination != "":
+            city = City.objects.filter(name__contains=destination).first()
+            hotels = Hotel.objects.filter(city=city).all()
+        else:
+            hotels = Hotel.objects.all()
+
+    else:
+        hotels = Hotel.objects.all()
 
     for hotel in hotels:
         # get lowest rate
@@ -27,19 +43,25 @@ def index(request):
         else:
             hotel.rate = 'call for price'
     return render(request, "reserve/index.html", {
-        "hotels": hotels
+        "hotels": hotels,
+        'form': SearchForm()
     })
 
 def view_hotel(request, hotel_id):
     user = request.user
 
     hotel = Hotel.objects.filter(id=hotel_id).first()
-
     rooms = Room.objects.filter(hotel=hotel_id).all()
+    favorite = None
+    if not user.is_anonymous:
+        fav = Favorite.objects.filter(hotel=hotel, user=user).first()
+        if fav is not None:
+            favorite = True
 
     return render(request, "reserve/hotel.html", {
         "hotel": hotel,
-        "rooms": rooms
+        "rooms": rooms,
+        "favorite": favorite
     })
 
 @login_required
@@ -57,6 +79,13 @@ def reserve(request, room_id):
         checkout = data.get("checkout").strip() 
         checkin_date = dateutil.parser.parse(checkin)
         checkout_date = dateutil.parser.parse(checkout)
+
+        #validate dates
+        if checkin_date >= checkout_date:
+            return JsonResponse({
+                "status": "fail",
+                "message": "error: please verify dates."
+            })
 
         try:
             room = Room.objects.filter(id=room_id).first()
@@ -128,6 +157,56 @@ def cancel(request, reservation_id):
             "status": status,
             "message": message
         })
+
+@login_required
+@csrf_exempt
+def favorite(request, hotel_id):
+    user = request.user
+
+    if request.method != "POST":
+        return JsonResponse({"error": "POST is required"}, status=400)
+
+    try:
+        favorite = Favorite.objects.filter(user=user, hotel=hotel_id).first()
+    except:
+        favorite = None
+
+    # mark it as favorite
+    if favorite is None:
+        try:
+            hotel = Hotel.objects.filter(id=hotel_id).first()
+            favorite = Favorite(user=user, hotel=hotel)
+            favorite.save()
+            favorite = True
+        except:
+            favorite = False
+    #remove from favorites
+    else:
+        favorite.delete()
+        favorite = False
+
+    return JsonResponse({
+        "status": "success",
+        "favorite": favorite
+    }, status=200)
+
+def favorites(request):
+    user = request.user
+
+    favorites = Favorite.objects.filter(user=user).all().values_list('hotel_id', flat=True)
+
+    hotels = Hotel.objects.filter(id__in=favorites)
+
+    for hotel in hotels:
+        # get lowest rate
+        room = Room.objects.filter(hotel=hotel).order_by("price").first()
+        if room:
+            hotel.rate = '${:.2f}'.format(room.price)
+        else:
+            hotel.rate = 'call for price'
+    return render(request, "reserve/favorites.html", {
+        "hotels": hotels
+    })
 
 def login_view(request):
     if request.method == "POST":

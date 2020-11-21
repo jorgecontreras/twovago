@@ -12,5 +12,8 @@ urlpatterns = [
     path("reserve/<int:room_id>", views.reserve, name="reserve"),
     path("cancel/<int:reservation_id>", views.cancel, name="cancel"),
     path("reservation/<int:reservation_id>", views.view_reservation, name="view_reservation"),
-    path("reservations", views.reservations_list, name="reservations_list")
+    path("reservations", views.reservations_list, name="reservations_list"),
+    path("favorite/<int:hotel_id>", views.favorite, name="favorite"),
+    path("favorites", views.favorites, name="favorites"),
+    path("search", views.index, name="search")
 ]

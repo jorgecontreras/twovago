@@ -1,6 +1,22 @@
 {% extends "reserve/layout.html" %}
 
 {% block body %}
+
+
+<div class="text-center">
+<h4>Where are you traveling to?</h4>
+        <form  action="{% url 'search' %}" method="post" >
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" class="btn btn-primary" value="Find Hotels">
+        </form>
+</div>
+        <p>&nbsp;</p>
+        {% if not hotels %}
+        <div class="alert alert-warning" role="alert">
+            Sorry, we could not find any hotels.    
+          </div>
+        {% endif %}
 <div class="list-group">
     {% for hotel in hotels %}
     <div class="list-group-item list-group-item-action flex-column align-items-start">

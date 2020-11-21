@@ -8,10 +8,14 @@
 <h2>{{ room.name }}</h2>
 <h3>${{ room.price|floatformat:2 }}</h3>
 
+<img src="{{ room.image }}" height="350px">
+    <p></p>
+    
 <div id="room_info">
     <p></p>
     <input type="hidden" value="{{ room.id }}" id="room_id">
 
+    
     check-in:
     <input id="checkin" width="276" />
 

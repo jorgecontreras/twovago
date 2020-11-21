@@ -1,0 +1,22 @@
+{% extends "reserve/layout.html" %}
+
+{% block body %}
+<div class="list-group">
+    {% if not hotels %}
+    <p>
+        <div class="alert alert-info" role="alert">
+            Your favorite hotels will be listed here. <a href="{% url 'index' %}">Choose your favorites!</a>
+        </div>
+    </p>
+    {% endif %}
+    {% for hotel in hotels %}
+    <div class="list-group-item list-group-item-action flex-column align-items-start">
+        <a href="{% url 'view_hotel' hotel.id %}">
+            <h4>{{ hotel.name }} | {{ hotel.rate }}</h4> </a>
+            {{ hotel.city }}
+            <p>{{ hotel.description }}</p>
+       
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

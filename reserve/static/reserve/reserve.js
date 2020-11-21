@@ -7,6 +7,12 @@ function reserve() {
     var ci = new Date(checkin);
     var co = new Date(checkout);
 
+    
+    if (ci >= co) {
+        alert("The dates you have selected dont seem right. Please verify.");
+        return;
+    }
+
     fetch('/reserve/' + room_id, {
         method: "POST",
         body: JSON.stringify({
@@ -46,4 +52,20 @@ function cancel(reservation_id) {
     } else {
         console.log("nothing changed")
     }
+}
+
+function favorite(hotel_id) {
+    fetch('/favorite/' + hotel_id, {
+        method: "POST",
+        body: ""
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log(result.favorite)
+        if(result.favorite) {
+            document.querySelector("#fav_hotel"+hotel_id).innerHTML = "<img src='/static/reserve/like.png' height='45px' %}'>"
+        } else {
+            document.querySelector("#fav_hotel"+hotel_id).innerHTML = "<img src='/static/reserve/unlike.png' height='45px' %}'>"
+        }
+    })
 }
