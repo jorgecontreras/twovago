@@ -1,8 +1,13 @@
+
 # Hotel Reservation System
 
 Hotel reservation system is a sytem created with Django and Javascript for the EDX web programming with Python and Javascript online program. It has been developed using the contents of the material provided during the course, applying lessons learned from every section. This capstone project is an application of all the techniques, tools, languages and practices learned throughout the course.
 
-Tools and techniques learned and applied:
+## Demo
+
+[![Quick demo](https://github.com/jorgecontreras/twovago/blob/master/reserve.png)](https://www.youtube.com/watch?v=o8aFsbYnJF4&t "Reserve App Demo")
+
+## Tools and techniques learned and applied:
 
 **1. Authentication.**
 Most features of this project require a user to be authenticated, like the reservation feature. Authenticating the user allows to restrict and control access to the person who has the authority. This is achieved by verifying the user object before taking any action, and redirecting to the login page if applicable. In the case of asynchronous methods, the @login_required decorator is used.
@@ -21,7 +26,6 @@ The application allows the user to interact with the page without requiring full
 
 **6. Templating language.**
 The templating language allows to interpret variables returned by the server and insert them or take decisions in the UI based on those values. I have made use of the templating language to iterate over a list of hotels and list of rooms. This template language was used also to toggle favorite icon, to make the links dynamic and more.
-
 
 # Specifications
 
@@ -59,4 +63,4 @@ The hotels that have been marked as favorite will be displayed in the Favorites 
 
 ## 9. Admin.
 
-All the hotels, rooms and cities are managed with the built-in Django admin. 
+The user can search hotels based on destination. He should get results for hotels based in the provided city, even if the city name is not complete. E.g. Searching for "New", would return hotels from New York City.
